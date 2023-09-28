@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n</Property>
+        <Property name="basePath">C:/temp/logs</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingFile name="fileLogger-mt"
+                     fileName="${basePath}/STEP_MT_audit.log"
+                     filePattern="${basePath}/app-%d{yyyy-MM-dd}.log.gz">
+            <EcsLayout>
+                <includeOrigin>true</includeOrigin> <!-- see https://www.elastic.co/guide/en/ecs-logging/java/current/setup.html -->
+                <KeyValuePair key="service.name" value="STEP MT"/>
+            </EcsLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- Max 10 files will be created everyday -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${basePathr}" maxDepth="10">
+                    <!-- Delete all files older than 30 days -->
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="fileLogger-gk"
+                     fileName="${basePath}/STEP_GK_audit.log"
+                     filePattern="${basePath}/app-%d{yyyy-MM-dd}.log.gz">
+            <EcsLayout>
+                <includeOrigin>true</includeOrigin> <!-- see https://www.elastic.co/guide/en/ecs-logging/java/current/setup.html -->
+                <!--                <eventDataset>step</eventDataset>-->
+                <KeyValuePair key="service.name" value="STEP GK"/>
+            </EcsLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- Max 10 files will be created everyday -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${basePathr}" maxDepth="10">
+                    <!-- Delete all files older than 30 days -->
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+                        <EcsLayout>
+                            <includeOrigin>true</includeOrigin> <!-- see https://www.elastic.co/guide/en/ecs-logging/java/current/setup.html -->
+                            <KeyValuePair key="service.name" value="STEP MT"/>
+                        </EcsLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="MT_LOGGER" level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger-mt" />
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="GK_LOGGER" level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger-gk" />
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Root level="info">
+<!--            <AppenderRef ref="console"/>-->
+        </Root>
+    </Loggers>
+</Configuration>

@@ -8,7 +8,7 @@
     <Appenders>
         <RollingFile name="fileLogger-mt"
                      fileName="${basePath}/STEP_MT_audit.log"
-                     filePattern="${basePath}/app-%d{yyyy-MM-dd}.log.gz">
+                     filePattern="${basePath}/archive/STEP_MT_audit-%d{yyyy-MM-dd}.log.gz">
             <EcsLayout>
                 <includeOrigin>true</includeOrigin> <!-- see https://www.elastic.co/guide/en/ecs-logging/java/current/setup.html -->
                 <KeyValuePair key="service.name" value="STEP MT"/>
@@ -28,7 +28,7 @@
 
         <RollingFile name="fileLogger-gk"
                      fileName="${basePath}/STEP_GK_audit.log"
-                     filePattern="${basePath}/app-%d{yyyy-MM-dd}.log.gz">
+                     filePattern="${basePath}/archive/STEP_GK-%d{yyyy-MM-dd}.log.gz">
             <EcsLayout>
                 <includeOrigin>true</includeOrigin> <!-- see https://www.elastic.co/guide/en/ecs-logging/java/current/setup.html -->
                 <!--                <eventDataset>step</eventDataset>-->
